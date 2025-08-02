@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: telemedicine-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  backend:
+    build: ./node-express-backend
+    container_name: telemedicine-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/telemedicine
+      - JWT_SECRET=telemedicine-jwt-secret-key-2024
+      - NODE_ENV=production
+    depends_on:
+      - mongodb
+    volumes:
+      - ./node-express-backend:/app
+      - /app/node_modules
+
+volumes:
+  mongodb_data:
