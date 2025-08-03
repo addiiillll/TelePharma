@@ -43,7 +43,7 @@ export default function Dashboard() {
     <div className="container mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-3xl font-bold">Doctor Dashboard</h1>
+          <h1 className="text-3xl font-bold text-foreground">Doctor Dashboard</h1>
           <p className="text-muted-foreground">Welcome, Dr. {doctor?.name}</p>
         </div>
         <Button onClick={handleLogout} variant="outline">
