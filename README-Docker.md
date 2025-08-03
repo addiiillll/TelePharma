@@ -9,7 +9,7 @@
 
 2. **Build and run with Docker Compose:**
    ```bash
-   docker-compose up --build
+   docker compose up --build
    ```
 
 3. **Access the application:**
