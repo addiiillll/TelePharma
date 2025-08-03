@@ -1,20 +1,33 @@
 'use client';
 
-import { createContext, useContext, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '@/lib/redux/store';
-
-const AuthContext = createContext({});
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { setCredentials, setLoading } from '@/lib/redux/slices/authSlice';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const auth = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
 
-  return (
-    <AuthContext.Provider value={{ auth, dispatch }}>
-      {children}
-    </AuthContext.Provider>
-  );
-}
+  useEffect(() => {
+    const verifyAuth = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/auth/verify', {
+          credentials: 'include'
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          dispatch(setCredentials({ doctor: data.doctor }));
+        }
+      } catch (error) {
+        // Silently handle auth verification failure
+        // This is expected when user is not logged in or server is down
+      } finally {
+        dispatch(setLoading(false));
+      }
+    };
 
-export const useAuth = () => useContext(AuthContext);
+    verifyAuth();
+  }, [dispatch]);
+
+  return <>{children}</>;
+}

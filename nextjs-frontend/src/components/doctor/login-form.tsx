@@ -13,6 +13,7 @@ import { useLoginDoctorMutation } from '@/lib/redux/slices/apiSlice';
 import { useDispatch } from 'react-redux';
 import { setCredentials } from '@/lib/redux/slices/authSlice';
 import { toast } from 'sonner';
+import Link from 'next/link';
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -34,12 +35,24 @@ export function LoginForm() {
 
   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     try {
-      const result = await loginDoctor(values).unwrap();
-      dispatch(setCredentials({ token: result.token, doctor: result.doctor }));
-      toast.success('Login successful');
-      router.push('/dashboard');
+      const response = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(values)
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        dispatch(setCredentials({ doctor: result.doctor }));
+        toast.success('Login successful');
+        router.push('/dashboard');
+      } else {
+        const error = await response.json();
+        toast.error(error.error || 'Login failed');
+      }
     } catch (error: any) {
-      toast.error(error.data?.message || 'Login failed');
+      toast.error('Login failed');
     }
   };
 
@@ -58,7 +71,7 @@ export function LoginForm() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="doctor@example.com" {...field} />
+                    <Input placeholder="doctor@example.com" {...field} suppressHydrationWarning />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -71,17 +84,26 @@ export function LoginForm() {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" {...field} />
+                    <Input type="password" {...field} suppressHydrationWarning />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" className="w-full" disabled={isLoading} suppressHydrationWarning>
               {isLoading ? 'Logging in...' : 'Login'}
             </Button>
           </form>
         </Form>
+        
+        <div className="mt-6 text-center">
+          <p className="text-sm text-muted-foreground">
+            Don't have an account?{' '}
+            <Link href="/register" className="text-primary hover:underline">
+              Register here
+            </Link>
+          </p>
+        </div>
       </CardContent>
     </Card>
   );

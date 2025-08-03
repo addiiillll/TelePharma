@@ -1,0 +1,539 @@
+{
+	"info": {
+		"_postman_id": "telepharma-api-collection",
+		"name": "TelePharma API",
+		"description": "Complete API collection for TelePharma backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:5000",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Doctor Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Dr. John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"password123\",\n  \"specialization\": \"Cardiology\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/register",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "register"]
+						}
+					}
+				},
+				{
+					"name": "Doctor Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Verify Token",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/verify",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "verify"]
+						}
+					}
+				},
+				{
+					"name": "Get Profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/profile",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "profile"]
+						}
+					}
+				},
+				{
+					"name": "Toggle Availability",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/toggle-availability",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "toggle-availability"]
+						}
+					}
+				},
+				{
+					"name": "Doctor Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/logout",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "logout"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Devices",
+			"item": [
+				{
+					"name": "Register Device",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"pharmacyName\": \"Central Pharmacy\",\n  \"location\": {\n    \"latitude\": 40.7589,\n    \"longitude\": -73.9851,\n    \"address\": \"123 Main St, New York, NY 10001\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/devices/register",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "devices", "register"]
+						}
+					}
+				},
+				{
+					"name": "Get All Devices",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/devices",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "devices"]
+						}
+					}
+				},
+				{
+					"name": "Get Device by Pharmacy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/devices/pharmacy?name=Central Pharmacy",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "devices", "pharmacy"],
+							"query": [
+								{
+									"key": "name",
+									"value": "Central Pharmacy"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Update Device Ping",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "your-device-api-key"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/devices/DEVICE001/ping",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "devices", "DEVICE001", "ping"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Sessions",
+			"item": [
+				{
+					"name": "Create Session (Device)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "your-device-api-key"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"patientInfo\": {\n    \"age\": 35,\n    \"symptoms\": \"Chest pain and shortness of breath\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/sessions/create",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "sessions", "create"]
+						}
+					}
+				},
+				{
+					"name": "Update Session Status (Doctor)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"active\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/sessions/session-id-here/status",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "sessions", "session-id-here", "status"]
+						}
+					}
+				},
+				{
+					"name": "Update Session Status (Device)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "your-device-api-key"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"completed\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/sessions/session-id-here/status",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "sessions", "session-id-here", "status"]
+						}
+					}
+				},
+				{
+					"name": "Get Doctor Sessions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/sessions/doctor",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "sessions", "doctor"]
+						}
+					}
+				},
+				{
+					"name": "Get All Sessions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/sessions/all",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "sessions", "all"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Notifications",
+			"item": [
+				{
+					"name": "Get Doctor Notifications",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/notifications/doctor?page=1&limit=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "notifications", "doctor"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Device Notifications",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "your-device-api-key"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/notifications/device?page=1&limit=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "notifications", "device"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Mark Notification as Read",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/notifications/notification-id-here/read",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "notifications", "notification-id-here", "read"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Admin Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@telepharma.com\",\n  \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "admin", "login"]
+						}
+					}
+				},
+				{
+					"name": "Admin Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/logout",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "admin", "logout"]
+						}
+					}
+				},
+				{
+					"name": "Get Admin Profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/profile",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "admin", "profile"]
+						}
+					}
+				},
+				{
+					"name": "Get Dashboard Stats",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/stats",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "admin", "stats"]
+						}
+					}
+				},
+				{
+					"name": "Get Online Doctors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/doctors/online",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "admin", "doctors", "online"]
+						}
+					}
+				},
+				{
+					"name": "Get All Doctors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/doctors?page=1&limit=10&search=&status=all",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "admin", "doctors"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "search",
+									"value": ""
+								},
+								{
+									"key": "status",
+									"value": "all"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Active Sessions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/sessions/active",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "admin", "sessions", "active"]
+						}
+					}
+				},
+				{
+					"name": "Get All Sessions (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/sessions?page=1&limit=10&search=&status=all",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "admin", "sessions"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "search",
+									"value": ""
+								},
+								{
+									"key": "status",
+									"value": "all"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Device Locations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/devices/locations",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "admin", "devices", "locations"]
+						}
+					}
+				},
+				{
+					"name": "Get All Pharmacies",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/pharmacies?page=1&limit=10&search=&status=all",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "admin", "pharmacies"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "search",
+									"value": ""
+								},
+								{
+									"key": "status",
+									"value": "all"
+								}
+							]
+						}
+					}
+				}
+			]
+		}
+	]
+}

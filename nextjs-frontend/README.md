@@ -1,36 +1,192 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TelePharma Frontend
 
-## Getting Started
+Next.js React frontend for the TelePharma telemedicine platform.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Doctor Dashboard** - Real-time session management and availability control
+- **Admin Panel** - Complete platform monitoring with interactive charts
+- **Authentication** - Secure login/register with password visibility toggle
+- **Responsive Design** - Mobile-first design with dark/light theme support
+- **Interactive Maps** - Pharmacy location mapping with Leaflet
+- **Real-time Updates** - Live session status and notifications
+- **Modern UI** - shadcn/ui components with Tailwind CSS
+
+## Tech Stack
+
+- **Framework**: Next.js 14 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **UI Components**: shadcn/ui
+- **Charts**: Recharts
+- **Maps**: React Leaflet
+- **State Management**: React hooks
+- **Authentication**: HTTP-only cookies
+- **Theme**: next-themes (dark/light mode)
+
+## Project Structure
+
+```
+src/
+├── app/                 # Next.js app router pages
+│   ├── admin/          # Admin dashboard pages
+│   ├── dashboard/      # Doctor dashboard
+│   ├── login/          # Authentication pages
+│   └── register/       
+├── components/         # Reusable components
+│   ├── admin/         # Admin-specific components
+│   ├── ui/            # shadcn/ui components
+│   └── providers/     # Context providers
+├── data/              # Static data and configurations
+├── hooks/             # Custom React hooks
+└── lib/               # Utilities and API functions
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Environment Variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Create `.env.local` file with:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+# Firebase Configuration
+NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyDwdp8YC0hg-3hrxRkrcXjGCx517Fq1nW0
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=telemedicine-31088.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=telemedicine-31088
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=telemedicine-31088.firebasestorage.app
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=792144509907
+NEXT_PUBLIC_FIREBASE_APP_ID=1:792144509907:web:2632bfae6ae6c50b078d26
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=G-278E0JEE4L
+NEXT_PUBLIC_FIREBASE_VAPID_KEY=BFgRm0lhkXu4ODQ9dXuKqdOMSRdV2tT_Yi8CiuedaJAEE28k47Xr58zcXdoEojQKFqDHgPAHTsIs3fvZpI0QJ1w
 
-## Learn More
+# API Configuration
+NEXT_PUBLIC_API_URL=http://localhost:5000
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Installation & Setup
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# Install dependencies
+npm install
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Start development server
+npm run dev
 
-## Deploy on Vercel
+# Build for production
+npm run build
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Start production server
+npm start
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Pages & Routes
+
+### Public Routes
+- `/` - Landing page with role-based navigation
+- `/login` - Doctor login with password toggle
+- `/register` - Doctor registration form
+- `/pharmacy` - Pharmacy device registration
+
+### Doctor Routes (Protected)
+- `/dashboard` - Doctor dashboard with session management
+
+### Admin Routes (Protected)
+- `/admin/login` - Admin authentication
+- `/admin/dashboard` - Main admin dashboard with charts
+- `/admin/dashboard/doctors` - Doctor management
+- `/admin/dashboard/sessions` - Session monitoring
+- `/admin/dashboard/pharmacies` - Pharmacy management with map
+
+## Key Components
+
+### Authentication
+- **Login/Register Forms** - With password visibility toggle
+- **Protected Routes** - Automatic redirection based on auth status
+- **Theme Toggle** - Simple light/dark mode switch
+
+### Doctor Dashboard
+- **Session Management** - Accept/complete consultations
+- **Availability Toggle** - Online/offline status control
+- **Real-time Updates** - Live session notifications
+- **Responsive Design** - Mobile-optimized interface
+
+### Admin Dashboard
+- **Interactive Charts** - Sessions, doctors, and pharmacy analytics
+- **Data Tables** - Sortable, searchable, paginated lists
+- **Pharmacy Map** - Interactive map with location pins
+- **Real-time Stats** - Live platform metrics
+
+### UI Components
+- **Cards** - Information display containers
+- **Tables** - Data presentation with actions
+- **Charts** - Interactive area charts with theme support
+- **Maps** - Leaflet integration with custom markers
+- **Forms** - Validated input forms with error handling
+
+## Styling & Theming
+
+- **Tailwind CSS** - Utility-first styling
+- **CSS Variables** - Theme-aware color system
+- **Dark/Light Mode** - Automatic theme switching
+- **Responsive Design** - Mobile-first breakpoints
+- **Component Variants** - Consistent design system
+
+## Development
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Application runs on http://localhost:3000
+```
+
+## Docker
+
+```bash
+# Build image
+docker build -t telepharma-frontend .
+
+# Run container
+docker run -p 3000:3000 telepharma-frontend
+```
+
+## API Integration
+
+- **Fetch API** - HTTP client for backend communication
+- **Cookie Authentication** - Automatic session management
+- **Error Handling** - User-friendly error messages
+- **Loading States** - Proper loading indicators
+
+## Features by Role
+
+### Doctors
+- Session management dashboard
+- Availability status control
+- Real-time notifications
+- Mobile-responsive interface
+
+### Admins
+- Platform analytics and charts
+- Doctor and session management
+- Pharmacy location mapping
+- Real-time monitoring
+
+### Public Users
+- Role-based landing page
+- Authentication forms
+- Pharmacy device registration
+
+## Browser Support
+
+- Chrome 90+
+- Firefox 88+
+- Safari 14+
+- Edge 90+
+
+## Performance
+
+- **Next.js Optimization** - Automatic code splitting
+- **Image Optimization** - Built-in Next.js image handling
+- **Static Generation** - Pre-rendered pages where possible
+- **Bundle Analysis** - Optimized JavaScript bundles

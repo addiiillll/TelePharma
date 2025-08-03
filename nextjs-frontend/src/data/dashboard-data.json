@@ -1,0 +1,44 @@
+{
+  "sessionsData": [
+    { "month": "Jan", "sessions": 45, "completedSessions": 38, "cancelledSessions": 7 },
+    { "month": "Feb", "sessions": 52, "completedSessions": 47, "cancelledSessions": 5 },
+    { "month": "Mar", "sessions": 68, "completedSessions": 61, "cancelledSessions": 7 },
+    { "month": "Apr", "sessions": 73, "completedSessions": 65, "cancelledSessions": 8 },
+    { "month": "May", "sessions": 89, "completedSessions": 82, "cancelledSessions": 7 },
+    { "month": "Jun", "sessions": 94, "completedSessions": 87, "cancelledSessions": 7 },
+    { "month": "Jul", "sessions": 102, "completedSessions": 95, "cancelledSessions": 7 },
+    { "month": "Aug", "sessions": 118, "completedSessions": 108, "cancelledSessions": 10 },
+    { "month": "Sep", "sessions": 125, "completedSessions": 115, "cancelledSessions": 10 },
+    { "month": "Oct", "sessions": 134, "completedSessions": 124, "cancelledSessions": 10 },
+    { "month": "Nov", "sessions": 142, "completedSessions": 131, "cancelledSessions": 11 },
+    { "month": "Dec", "sessions": 156, "completedSessions": 144, "cancelledSessions": 12 }
+  ],
+  "doctorsData": [
+    { "month": "Jan", "totalDoctors": 12, "onlineDoctors": 8 },
+    { "month": "Feb", "totalDoctors": 14, "onlineDoctors": 10 },
+    { "month": "Mar", "totalDoctors": 16, "onlineDoctors": 12 },
+    { "month": "Apr", "totalDoctors": 18, "onlineDoctors": 14 },
+    { "month": "May", "totalDoctors": 22, "onlineDoctors": 16 },
+    { "month": "Jun", "totalDoctors": 25, "onlineDoctors": 18 },
+    { "month": "Jul", "totalDoctors": 28, "onlineDoctors": 21 },
+    { "month": "Aug", "totalDoctors": 32, "onlineDoctors": 24 },
+    { "month": "Sep", "totalDoctors": 35, "onlineDoctors": 27 },
+    { "month": "Oct", "totalDoctors": 38, "onlineDoctors": 29 },
+    { "month": "Nov", "totalDoctors": 42, "onlineDoctors": 32 },
+    { "month": "Dec", "totalDoctors": 45, "onlineDoctors": 35 }
+  ],
+  "pharmaciesData": [
+    { "month": "Jan", "totalPharmacies": 8, "activePharmacies": 6 },
+    { "month": "Feb", "totalPharmacies": 10, "activePharmacies": 8 },
+    { "month": "Mar", "totalPharmacies": 12, "activePharmacies": 10 },
+    { "month": "Apr", "totalPharmacies": 15, "activePharmacies": 12 },
+    { "month": "May", "totalPharmacies": 18, "activePharmacies": 15 },
+    { "month": "Jun", "totalPharmacies": 22, "activePharmacies": 18 },
+    { "month": "Jul", "totalPharmacies": 25, "activePharmacies": 21 },
+    { "month": "Aug", "totalPharmacies": 28, "activePharmacies": 24 },
+    { "month": "Sep", "totalPharmacies": 32, "activePharmacies": 27 },
+    { "month": "Oct", "totalPharmacies": 35, "activePharmacies": 30 },
+    { "month": "Nov", "totalPharmacies": 38, "activePharmacies": 33 },
+    { "month": "Dec", "totalPharmacies": 42, "activePharmacies": 36 }
+  ]
+}

@@ -20,29 +20,20 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { ModeToggle } from "./mode-toggle"
 
+interface NavigationItem {
+  title: string
+  url: string
+  icon: React.ComponentType<any>
+  badge?: number
+}
+
 // Navigation items for the telemedicine app
-const navigationItems = [
+const navigationItems: NavigationItem[] = [
   {
     title: "Home",
     url: "/",
     icon: Home,
-  },
-  {
-    title: "Video Calls",
-    url: "/video-calls",
-    icon: Video,
-  },
-  {
-    title: "Messages",
-    url: "/messages",
-    icon: MessageSquare,
-    badge: "12",
-  },
-  {
-    title: "Records",
-    url: "/records",
-    icon: Stethoscope,
-  },
+  }
 ]
 
 export function Navbar() {
@@ -84,14 +75,6 @@ export function Navbar() {
         {/* Right side actions */}
         <div className="flex items-center gap-2">
          <ModeToggle/>
-
-          {/* Notifications */}
-          <Button variant="ghost" size="icon" className="relative">
-            <Bell className="h-4 w-4" />
-            <Badge variant="destructive" className="absolute -top-1 -right-1 h-5 w-5 p-0 text-xs">
-              5
-            </Badge>
-          </Button>
 
           {/* Admin Button */}
           <Link href="/admin/login">

@@ -1,89 +1,156 @@
 const Session = require('../models/Session');
 const Doctor = require('../models/Doctor');
-const Device = require('../models/Device');
+const { v4: uuidv4 } = require('uuid');
+const notificationService = require('../services/notificationService');
 
 const sessionController = {
-  // Initiate Session from Pharmacy Device
-  initiate: async (req, res) => {
+  // Create new session (device-initiated)
+  createSession: async (req, res) => {
     try {
-      const { deviceId, patientName, patientAge, symptoms } = req.body;
+      const deviceId = req.device.deviceId;
       
-      // Verify device exists
-      const device = await Device.findOne({ deviceId, isActive: true });
-      if (!device) {
-        return res.status(404).json({ error: 'Device not found or inactive' });
-      }
-
-      // Find available doctor
-      const availableDoctor = await Doctor.findOne({ 
-        isOnline: true, 
-        isAvailable: true 
+      // Find doctors who are available and online
+      const availableDoctors = await Doctor.find({ 
+        isAvailable: true, 
+        isOnline: true 
       });
-
-      const sessionId = `SESSION_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      
+      if (availableDoctors.length === 0) {
+        return res.status(404).json({ error: 'No doctors available' });
+      }
+      
+      // Find a doctor who is not in any active/waiting session
+      let availableDoctor = null;
+      for (const doctor of availableDoctors) {
+        const existingSession = await Session.findOne({
+          doctorId: doctor._id,
+          status: { $in: ['active', 'waiting'] }
+        });
+        
+        if (!existingSession) {
+          availableDoctor = doctor;
+          break;
+        }
+      }
+      
+      if (!availableDoctor) {
+        return res.status(409).json({ error: 'All doctors are currently busy' });
+      }
+      
+      const sessionId = uuidv4();
+      const firebaseRoomId = `session_${sessionId}`;
       
       const session = new Session({
         sessionId,
         deviceId,
-        doctorId: availableDoctor?._id,
-        patientName,
-        patientAge,
-        symptoms,
-        status: availableDoctor ? 'active' : 'waiting'
+        doctorId: availableDoctor._id,
+        firebaseRoomId,
+        status: 'waiting' // Start as waiting for doctor acceptance
       });
-
+      
       await session.save();
-      await session.populate('doctorId', 'name specialization');
-
+      
+      // Send notification to doctor
+      await notificationService.sendNotification(
+        'doctor',
+        availableDoctor._id.toString(),
+        'session_request',
+        'New Session Request',
+        `Patient waiting for consultation at ${req.device.pharmacyName}`,
+        session.sessionId
+      );
+      
       res.status(201).json({ 
-        message: 'Session initiated', 
-        session,
-        doctor: availableDoctor ? {
-          name: availableDoctor.name,
-          specialization: availableDoctor.specialization
-        } : null
+        sessionId: session.sessionId,
+        firebaseRoomId,
+        doctorName: availableDoctor.name,
+        status: 'waiting'
       });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   },
 
-  // Get All Sessions
-  getAll: async (req, res) => {
+  // Update session status
+  updateSessionStatus: async (req, res) => {
+    try {
+      const { sessionId } = req.params;
+      const { status } = req.body;
+      
+      const session = await Session.findOne({ sessionId });
+      if (!session) {
+        return res.status(404).json({ error: 'Session not found' });
+      }
+      
+      session.status = status;
+      
+      // Handle notifications based on status
+      if (status === 'active' && req.doctor) {
+        // Doctor accepted - notify device
+        await notificationService.sendNotification(
+          'device',
+          session.deviceId,
+          'session_accepted',
+          'Doctor Connected',
+          `Dr. ${req.doctor.name} has joined your consultation`,
+          session.sessionId
+        );
+      } else if (status === 'completed') {
+        // Session completed - notify device
+        await notificationService.sendNotification(
+          'device',
+          session.deviceId,
+          'session_completed',
+          'Session Completed',
+          'Your consultation has been completed. Thank you!',
+          session.sessionId
+        );
+      }
+      
+      if (status === 'completed' || status === 'cancelled') {
+        session.endTime = new Date();
+        
+        // Make doctor available again
+        const doctor = await Doctor.findById(session.doctorId);
+        if (doctor) {
+          doctor.isAvailable = true;
+          await doctor.save();
+        }
+      }
+      
+      await session.save();
+      res.json({ session });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+
+  // Get doctor's own sessions + waiting sessions
+  getDoctorSessions: async (req, res) => {
+    try {
+      const sessions = await Session.find({
+        $or: [
+          { doctorId: req.doctor._id }, // Doctor's own sessions
+          { status: 'waiting', doctorId: { $exists: true } } // Waiting sessions for any doctor
+        ]
+      })
+        .populate('doctorId', 'name specialization')
+        .sort({ createdAt: -1 });
+      
+      res.json({ sessions });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+
+  // Get all sessions (for admin only)
+  getAllSessions: async (req, res) => {
     try {
       const sessions = await Session.find()
         .populate('doctorId', 'name specialization')
         .sort({ createdAt: -1 });
-      res.json(sessions);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  },
-
-  // Update Session Status
-  updateStatus: async (req, res) => {
-    try {
-      const { status, notes } = req.body;
-      const updateData = { status };
       
-      if (status === 'completed') {
-        updateData.endTime = new Date();
-      }
-      if (notes) {
-        updateData.notes = notes;
-      }
-
-      const session = await Session.findOneAndUpdate(
-        { sessionId: req.params.sessionId },
-        updateData,
-        { new: true }
-      ).populate('doctorId', 'name specialization');
-
-      if (!session) {
-        return res.status(404).json({ error: 'Session not found' });
-      }
-
-      res.json(session);
+      res.json({ sessions });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
